@@ -38,7 +38,7 @@ window.onload=()=>{
 var question = document.getElementById("question")
 var buttons = document.getElementById("buttons")
 
-var current = {
+var orig = {
 	t:0,
 	te: "Does Caden want a hug?",
 	q: [{
@@ -88,7 +88,27 @@ var current = {
 	}]
 };
 
-parseCurrent();
+var current = orig;
+
+function makeCurrent() {
+	console.log("working...")
+	current = orig;
+	if (history.state != null) {
+		for (var x of history.state) {
+			current = current.q[x].t;
+		}
+	}
+	document.body.classList.remove("yes");
+	document.body.classList.remove("no");
+	document.body.classList.remove("maybe");
+	parseCurrent();
+}
+
+makeCurrent();
+
+var state = history.state || [];
+
+window.onpopstate = makeCurrent;
 
 function createButton(b) {
 	var str = b.t;
@@ -97,6 +117,8 @@ function createButton(b) {
 	button.onclick = ()=>{
 		console.log(button);
 		current = str;
+		state.push(Array.prototype.indexOf.call(buttons.children, button));
+		history.pushState(state, '');
 		parseCurrent();
 	};
 	buttons.appendChild(button);
