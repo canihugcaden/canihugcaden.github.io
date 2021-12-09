@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+font-size: 2em;
+text-align: center;
+}
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+button {
+margin: 0.4em;
+font-size: 2em;
+}
+body.no {
+background-color: red;
+color: white;
+}
+body.yes {
+background-color: green;
+color: white;
+}
+body.maybe {
+background-color: purple;
+color: white;
+}
+</style>
+<title>Can I Hug Caden?</title>
+<script>
+window.onload=()=>{
+
+var question = document.getElementById("question")
+var buttons = document.getElementById("buttons")
+
+var current = {
+	t:0,
+	te: "Does Caden want a hug?",
+	q: [{
+		te: "yes",
+		t: {
+			t: 0,
+			te: "Does Caden know you're there?",
+			q: [{
+				te: "yes",
+				t: {
+					t: 0,
+					te: "Is it an appropriate time to hug Caden?",
+					q: [{
+						te: "yes",
+						t: {
+							t: 2,
+							te: "Yes"
+						}
+					},{
+						te: "no",
+						t: {
+							t: 1,
+							te: "No."
+						}
+					}]
+				}
+			},{
+				te: "no",
+				t: {
+					t: 1,
+					te: "No."
+				}
+			}]
+		}
+	},{
+		te: "no",
+		t: {
+			t:1,
+			te:"No."
+		}
+	},{
+		te: "maybe",
+		t: {
+			t:3,
+			te:"You should ask."
+		}
+	}]
+};
+
+parseCurrent();
+
+function createButton(b) {
+	var str = b.t;
+	var button = document.createElement("button");
+	button.innerText = b.te;
+	button.onclick = ()=>{
+		console.log(button);
+		current = str;
+		parseCurrent();
+	};
+	buttons.appendChild(button);
+}
+
+function parseCurrent() {
+	buttons.textContent = '';
+	question.innerText = current.te;
+	if (current.t == 0) {
+	for (var b of current.q) {
+		createButton(b);
+	}
+	} else if (current.t == 1) {
+		//alert("no");
+		document.body.classList.add("no");
+	} else if (current.t == 2) {
+		//alert("yes");
+		document.body.classList.add("yes");
+	} else if (current.t == 3) {
+		//alert("yes");
+		document.body.classList.add("maybe");
+	}
+}
+
+}
+</script>
+</head>
+<body class="">
+<div class="vertical-center">
+<h1>Can I?</h1>
+<h3 id="question">...</h3>
+<div id="buttons"></div>
+</div>
+</body>
+</html>
